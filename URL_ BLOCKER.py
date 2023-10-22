@@ -89,7 +89,7 @@ def display_blocked_urls(enum=False):
 def block_url(url):
 
     # for cleaning the dns cache in the OS
-    os.system('ipconfig /flushdns', shell=True)
+    os.system('ipconfig /flushdns')
 
     with open(HOST_PATH, 'r+') as hf:
         file_content = hf.read()
@@ -97,7 +97,7 @@ def block_url(url):
             hf.write("\n"+IP_ADDRESS + ' ' + url)
 
 
-def unblock_url(url_to_remove):
+def unlock_url(url_to_remove):
     blocked_urls = get_blocked_urls()
     unlock_all_urls()
     with open(HOST_PATH, 'a') as hf:
@@ -134,11 +134,11 @@ def add_a_url():
     elif 'https://' in url_to_add:
         url_to_add = url_to_add.replace('https://', '')
 
-    if (url_to_add in blocked_urls):
+    if url_to_add in blocked_urls:
         print('ALREADY BLOCKED')
-        gotomain()
-    block_url(url_to_add)
-    print(f'{url_to_add} --> BLOCKED')
+    else:
+        block_url(url_to_add)
+        print(f'{url_to_add} --> BLOCKED')
 
     gotomain()
 
@@ -155,15 +155,15 @@ def remove_a_url():
         gotomain()
 
     try:
-        choiche = int(answer) - 1
+        choiche = int(answer)-1
     except:
         print('Inexisting selection')
         time.sleep(0.5)
         remove_a_url()
 
-    if 0 <= choiche < len(blocked_urls)-1:
+    if 0 <= choiche < len(blocked_urls):
         url_to_remove = blocked_urls[choiche]
-        unblock_url(url_to_remove)
+        unlock_url(url_to_remove)
         print(f'{url_to_remove} --> UNLOCKED')
     else:
         print('Inexisting selection')
