@@ -6,9 +6,6 @@ import sys
 import ctypes
 import re
 
-# TODO:
-# - Remember to change the way priviligies are taken for a better design of the software
-# - If we can restart the script with privilegies in the same console the restart should work
 
 # DECORATION
 class bcolors:
@@ -21,7 +18,8 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-# 
+#
+
 
 DEFAULT_TEXT_HOST_FILE = """# Copyright (c) 1993-2006 Microsoft Corp. # # This is a sample HOSTS file used by Microsoft TCP/IP for Windows. 
 # 
@@ -48,12 +46,14 @@ DEFAULT_TEXT_HOST_FILE = """# Copyright (c) 1993-2006 Microsoft Corp. # # This i
 HOST_PATH = 'C:\Windows\System32\drivers\etc\hosts'
 IP_ADDRESS = '127.0.0.1'
 
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-    
+
+
 def gotomain():
     print('backing to main...')
     time.sleep(0.5)
@@ -61,7 +61,8 @@ def gotomain():
 
 
 def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def get_blocked_urls():
     blocked_urls = []
@@ -72,15 +73,16 @@ def get_blocked_urls():
                 blocked_urls.append(line[10:].strip())
     return blocked_urls
 
+
 def display_blocked_urls(enum=False):
     blocked_urls = get_blocked_urls()
     if not len(blocked_urls):
         print("There is no blocked URL")
     for i, url in enumerate(blocked_urls):
-        if enum: 
+        if enum:
             print(f'{i+1} -> {url}')
         else:
-            print('-> '+ url)
+            print('-> ' + url)
     print('\n')
 
 
@@ -98,18 +100,16 @@ def unblock_url(url_to_remove):
     with open(HOST_PATH, 'a') as hf:
         line_to_add = ''
         for url in blocked_urls:
-            if url == url_to_remove: 
+            if url == url_to_remove:
                 continue
             else:
                 line_to_add = line_to_add + '\n' + IP_ADDRESS + ' ' + url
         hf.write(line_to_add)
 
 
-
 def unlock_all_urls():
     with open(HOST_PATH, 'w') as hf:
         hf.write(DEFAULT_TEXT_HOST_FILE)
-        
 
 
 def add_a_url():
@@ -126,11 +126,12 @@ def add_a_url():
         print('INVALID URL')
         gotomain()
 
-    if 'http://' in url_to_add: url_to_add = url_to_add.replace('http://', '')
-    elif 'https://' in url_to_add: url_to_add = url_to_add.replace('https://', '')
+    if 'http://' in url_to_add:
+        url_to_add = url_to_add.replace('http://', '')
+    elif 'https://' in url_to_add:
+        url_to_add = url_to_add.replace('https://', '')
 
-
-    if(url_to_add in blocked_urls):
+    if (url_to_add in blocked_urls):
         print('ALREADY BLOCKED')
         return
     block_url(url_to_add)
@@ -139,20 +140,17 @@ def add_a_url():
     gotomain()
 
 
-
-
 def remove_a_url():
     cls()
     print(f"{bcolors.WARNING}///////////////////////////////////////////// UNLOCK A URL ////////////////////////////////////////////////{bcolors.ENDC}")
     blocked_urls = get_blocked_urls()
-    
+
     display_blocked_urls(enum=True)
 
-    
-    answer = input('Write the number to unlock (or B to back to main): ')  
+    answer = input('Write the number to unlock (or B to back to main): ')
     if answer.upper() == 'B':
         gotomain()
-    
+
     try:
         choiche = int(answer) - 1
     except:
@@ -160,7 +158,7 @@ def remove_a_url():
         time.sleep(0.5)
         remove_a_url()
 
-    if 0<=choiche<len(blocked_urls)-1 :
+    if 0 <= choiche < len(blocked_urls)-1:
         url_to_remove = blocked_urls[choiche]
         unblock_url(url_to_remove)
         print(f'{url_to_remove} --> UNLOCKED')
@@ -170,8 +168,6 @@ def remove_a_url():
         remove_a_url()
 
     gotomain()
-
-
 
 
 def remove_all_urls():
@@ -191,10 +187,7 @@ def remove_all_urls():
 
     gotomain()
 
-   
- 
 
-    
 def main():
 
     cls()
@@ -203,9 +196,8 @@ def main():
     #     command = [sys.executable] + sys.argv
     #     subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #     sys.exit(0)
-    
+
     os.system('color')
-    
 
     # elevate()
 
@@ -213,11 +205,9 @@ def main():
     print(f"{bcolors.WARNING}///////////////////////////////////////////// URL BLOCKER ////////////////////////////////////////////////{bcolors.ENDC}")
     print(f'{bcolors.WARNING}//////////////////////////////////////////////////////////////////////////////////////////////////////////{bcolors.ENDC}')
 
-
     print(f'{bcolors.UNDERLINE}\nBLOCKED URLS LIST:{bcolors.ENDC}')
 
     display_blocked_urls()
-
 
     print(f'{bcolors.HEADER}ACTIONS{bcolors.ENDC}')
     print(f'{bcolors.BOLD}1 - Block a URL{bcolors.ENDC}')
@@ -245,21 +235,3 @@ if __name__ == "__main__":
         pyuac.runAsAdmin()
         quit()
     main()
-
-  
-
-
-  
-
-
-
-
-    
-
-
-        
-        
-
-
-
-
