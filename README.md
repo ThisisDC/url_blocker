@@ -1,2 +1,3 @@
 # url_blocker
- A python script useful for block some urls for our pc.
+
+A Python script useful for block some urls for our pc.
