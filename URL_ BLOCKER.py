@@ -47,20 +47,22 @@ HOST_PATH = 'C:\Windows\System32\drivers\etc\hosts'
 IP_ADDRESS = '127.0.0.1'
 
 
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
+def take_privilegies():
+    """Restart the script with privilegies"""
+    if not pyuac.isUserAdmin():
+        pyuac.runAsAdmin()
+        quit()
 
 
 def gotomain():
+    """Bring back the user to main"""
     print('backing to main...')
     time.sleep(0.5)
     main()
 
 
 def cls():
+    """Clean the console"""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
@@ -191,15 +193,7 @@ def remove_all_urls():
 def main():
 
     cls()
-    # if not is_admin():
-    # # Relaunch the script with administrator privileges
-    #     command = [sys.executable] + sys.argv
-    #     subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #     sys.exit(0)
-
-    os.system('color')
-
-    # elevate()
+    os.system('color')  # -> used for color the console
 
     print(f'{bcolors.WARNING}//////////////////////////////////////////////////////////////////////////////////////////////////////////{bcolors.ENDC}')
     print(f"{bcolors.WARNING}///////////////////////////////////////////// URL BLOCKER ////////////////////////////////////////////////{bcolors.ENDC}")
@@ -231,7 +225,5 @@ def main():
 
 
 if __name__ == "__main__":
-    if not pyuac.isUserAdmin():
-        pyuac.runAsAdmin()
-        quit()
+    take_privilegies()
     main()
