@@ -136,7 +136,7 @@ def add_a_url():
 
     if (url_to_add in blocked_urls):
         print('ALREADY BLOCKED')
-        return
+        gotomain()
     block_url(url_to_add)
     print(f'{url_to_add} --> BLOCKED')
 
