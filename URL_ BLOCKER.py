@@ -1,10 +1,8 @@
-import ctypes
 import os
 import time
 import pyuac
-import sys
-import ctypes
 import re
+import subprocess
 
 
 # DECORATION
@@ -89,7 +87,10 @@ def display_blocked_urls(enum=False):
 
 
 def block_url(url):
-    os.system('ipconfig /flushdns')
+
+    # for cleaning the dns cache in the OS
+    os.system('ipconfig /flushdns', shell=True)
+
     with open(HOST_PATH, 'r+') as hf:
         file_content = hf.read()
         if url not in file_content:
@@ -209,7 +210,14 @@ def main():
     print(f'{bcolors.BOLD}3 - Unlock all the URLS\n{bcolors.ENDC}')
     print(f'{bcolors.WARNING}//////////////////////////////////////////////////////////////////////////////////////////////////////////{bcolors.ENDC}')
 
-    user_choiche = int(input('Your choiche: '))
+    user_choiche = input('Your choiche: ')
+
+    try:
+        user_choiche = int(user_choiche)
+    except:
+        print('The choiche must be a number!')
+        time.sleep(0.5)
+        main()
 
     match user_choiche:
         case 1:
