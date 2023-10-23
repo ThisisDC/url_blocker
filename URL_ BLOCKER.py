@@ -126,9 +126,9 @@ def add_a_url():
 
     url_to_add = answer.lower()
     if not re.match(url_pattern, url_to_add):
-        print('INVALID URL')
-        gotomain()
-
+        print('Invalid selection')
+        time.sleep(0.5)
+        add_a_url()
     if 'http://' in url_to_add:
         url_to_add = url_to_add.replace('http://', '')
     elif 'https://' in url_to_add:
@@ -157,7 +157,7 @@ def remove_a_url():
     try:
         choiche = int(answer)-1
     except:
-        print('Inexisting selection')
+        print('Invalid selection')
         time.sleep(0.5)
         remove_a_url()
 
